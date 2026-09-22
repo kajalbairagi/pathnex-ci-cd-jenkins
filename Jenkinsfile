@@ -1,41 +1,24 @@
-jenkins:
-  systemMessage: "Auto-configured Jenkins (Ansible + JCasC)"
-  numExecutors: 2
+pipeline {
+    agent any
 
-  securityRealm:
-    local:
-      allowsSignup: false
-      users:
-        - id: "admin"
-          password: "Admin@123"
+    stages {
 
-  authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: false
+        stage('Build') {
+            steps {
+                echo 'Building the application'
+            }
+        }
 
-credentials:
-  system:
-    domainCredentials:
-      - credentials:
-          - string:
-              scope: GLOBAL
-              id: "sonarqube-token"
-              secret: "REPLACE_WITH_SONAR_TOKEN"
-              description: "Sonar Token"
+        stage('Test') {
+            steps {
+                echo 'Running tests'
+            }
+        }
 
-unclassified:
-  sonarGlobalConfiguration:
-    installations:
-      - name: "sonarqube-server"
-        serverUrl: "http://localhost:9000"
-        serverAuthenticationToken: "sonarqube-token"
-
-tool:
-  sonarRunnerInstallation:
-    installations:
-      - name: "SonarQubeScanner"
-        properties:
-          - installSource:
-              installers:
-                - sonarRunnerInstaller:
-                    id: "latest"
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the application'
+            }
+        }
+    }
+}
